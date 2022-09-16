@@ -2,6 +2,7 @@ package com.chuoli.rtmpdump;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 rtmpPush.nInitConnect("131");
+            }
+        });
+
+
+        TextView openglTV = findViewById(R.id.openglTV);
+        openglTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,OpenglActivity.class));
             }
         });
 
