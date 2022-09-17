@@ -43,6 +43,8 @@ android {
             version "3.10.2"
         }
     }
+
+    //本项目的token: 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
 }
 
 dependencies {
