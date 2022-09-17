@@ -11,7 +11,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * 三角形
+ * 带相机的三角形
  */
 public class TriangleWithCamera extends Shader {
 
@@ -20,7 +20,7 @@ public class TriangleWithCamera extends Shader {
     private final int VERTEX_STRIDE = COORDS_PER_VERTEX * BYTES_PER_FLOAT;
     private final String vertexShaderCode =
             "attribute vec4 vPosition;" +
-                    "uniform mat4 vMatrix;" +
+                    "uniform mat4 vMatrix;"+
                     "void main() {" +
                     "gl_Position = vMatrix*vPosition;" +
                     "}";
@@ -46,6 +46,9 @@ public class TriangleWithCamera extends Shader {
     private int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     /*****透视矩阵******/
     private float[] mPerspectiveMatrix = new float[16];
+    private float[] mCameraMatrix = new float[16];
+    private float[] mResultMatrix = new float[16];
+    private int mMatrixHandler;
 
 
     @Override
@@ -81,6 +84,10 @@ public class TriangleWithCamera extends Shader {
         float ratio = (float) width / height;
         //设置透视投影
         Matrix.frustumM(mPerspectiveMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        //设置相机位置
+        Matrix.setLookAtM(mCameraMatrix,0,0,0,7,0,0,0,0,1,0);
+        //计算变幻矩阵
+        Matrix.multiplyMM(mResultMatrix,0,mPerspectiveMatrix,0,mCameraMatrix,0);
     }
 
     @Override
@@ -88,6 +95,11 @@ public class TriangleWithCamera extends Shader {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         GLES20.glUseProgram(mProgram);
+
+        mMatrixHandler= GLES20.glGetUniformLocation(mProgram,"vMatrix");
+        //指定vMatrix的值
+        GLES20.glUniformMatrix4fv(mMatrixHandler,1,false,mResultMatrix,0);
+
         //获取顶点的句柄
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
         //起用句柄
