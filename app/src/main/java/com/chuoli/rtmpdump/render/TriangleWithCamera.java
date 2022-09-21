@@ -73,6 +73,7 @@ public class TriangleWithCamera extends Shader {
         GLES20.glAttachShader(mProgram, fragmentShader);
         //链接程序
         GLES20.glLinkProgram(mProgram);
+        //
 
 
     }
