@@ -23,7 +23,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private void init() {
         setEGLContextClientVersion(2);
-        setRenderer(mShader = new Square());
+        setRenderer(mShader = new TriangleWithCamera());
         setRenderMode(RENDERMODE_WHEN_DIRTY);
     }
 }
